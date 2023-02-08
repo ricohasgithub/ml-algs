@@ -68,21 +68,42 @@ class DecisionTree():
         self.label_data = Y[:-1]
         self.result = Y[-1]
     
-    def grow_tree(self):
+    def grow_tree(self, node):
         '''
         :params:
         data: data is presented as a numpy 
         '''
-        pass
+        min_gini = 99999999
+        min_decision = None
+
+        for i in range(len(self.labels)):
+
+            label = self.labels[i]
+            queries = self.label_data[i]
+
+            decision = None
+            if type(queries[0]) == "bool":
+                decision = binary_decision()
+            else:
+                decision = continuous_decision()
+
+            gini = gini_impurity()
+            if gini < min_gini:
+                min_gini = gini
+                min_decision = decision
+
+        node.grow_child_nodes(min_decision)
+        self.grow_tree(node.left)
+        self.grow_tree(node.right)
 
 class ClassificationDT(DecisionTree):
 
     def __init__(self, X, Y):
         super().__init__(X, Y)
+        self.root = self.find_root
+        self.grow_tree(self.root)
     
-    def grow_tree(self):
-
-        super().grow_tree()
+    def find_root(self):
         min_gini = 99999999
         root = None
 
@@ -101,3 +122,8 @@ class ClassificationDT(DecisionTree):
             if gini < min_gini:
                 min_gini = gini
                 root = DecisionTreeNode(self.X, self.Y, decision)
+
+        return root
+
+    def grow_tree(self, node):
+        return super().grow_tree(node)
