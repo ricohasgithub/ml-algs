@@ -60,13 +60,17 @@ def generate_chord_progression(n):
 
     return progression, progression_roman
 
+print(generate_chord_progression(5))
+
 def generate_fake_musical_data(m, n):
     # Generate a distribution of 7 elements for 7 emotions which sum up to 1
     # Returns a n x m matrix of emotions
     data = []
+    data_romans = []
     for i in range(m):
-        data.append(generate_chord_progression(n))
-    return data
+        data.append(generate_chord_progression(n)[0])
+        data_romans.append(generate_chord_progression(n)[1])
+    return data, data_romans
 
 def generate_fake_musical_data_as_pd(m, n):
     pass
