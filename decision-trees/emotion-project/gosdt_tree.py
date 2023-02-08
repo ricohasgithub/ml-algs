@@ -33,15 +33,8 @@ class Chord():
 
 CHORDS = [Chord(r) for r in ROMANS]
 
-class Progression():
-
-    def __init__(self, length, principal_emotion):
-        pass
-
-    def generate_sequence(self):
-        pass
-
-def generate_fake_musical_data():
+def generate_fake_musical_data(n):
     # Generate a distribution of 7 elements for 7 emotions which sum up to 1
+    # Total sequence of chords has length n
 
     pass
