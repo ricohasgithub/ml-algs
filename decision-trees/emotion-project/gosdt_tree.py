@@ -37,13 +37,18 @@ class Chord():
     def print_chord(self):
         print(self.roman, ": ", self.emotion_dist)
 
-def generate_chord_progression(n):
+def generate_chord_progression(n, chords=True):
     # Total sequence of chords has length n
 
     CHORDS = [Chord(r) for r in ROMANS]
     start = np.random.choice(CHORDS, 1)[0]
 
-    progression = [start]
+    progression = []
+
+    if chords:
+        progression = [start]
+    else:
+        progression = [start.emotion_dist]
 
     for i in range(n-1):
         # Regenerate chords
@@ -51,16 +56,26 @@ def generate_chord_progression(n):
 
         if start.roman.isupper():
             # Use starting chord's emotional distribution to roughly model the full progression of length n
-            progression.append(np.random.choice(CHORDS, 1, p=MAJOR_PROG_WEIGHTS)[0])
+            chord = np.random.choice(CHORDS, 1, p=MAJOR_PROG_WEIGHTS)[0]
+            if chords:
+                progression.append(chord)
+            else:
+                progression.append(chord.emotion_dist)
         else:
-            progression.append(np.random.choice(CHORDS, 1, p=MINOR_PROG_WEIGHTS)[0])
+            chord = np.random.choice(CHORDS, 1, p=MINOR_PROG_WEIGHTS)[0]
+            if chords:
+                progression.append(chord)
+            else:
+                progression.append(chord.emotion_dist)
 
     return progression
 
-def generate_fake_musical_data(n):
+def generate_fake_musical_data(m, n, chords=True):
     # Generate a distribution of 7 elements for 7 emotions which sum up to 1
-    pass
+    # Returns a n x m matrix of emotions
+    data = []
+    for i in range(m):
+        data.append(generate_chord_progression(n,chords=chords))
+    return data
 
-prog = generate_chord_progression(5)
-for chord in prog:
-    chord.print_chord()
+print(generate_fake_musical_data(3,5,chords=False))
