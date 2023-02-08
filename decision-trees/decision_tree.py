@@ -4,6 +4,14 @@ import numpy as np
 def gini_impurity():
     pass
 
+# Boolean (True or False) data
+def binary_decision():
+    pass
+
+# Real valued data
+def continuous_decision():
+    pass
+
 class DecisionTreeNode():
 
     def __init__(self, labels, data, decision):
@@ -41,16 +49,24 @@ class DecisionTreeNode():
             return self.labels
         return self.decision(self.labels, self.row)
 
+    def get_gini(self):
+        return self.gini
 
 class DecisionTree():
 
-    def __init__(self, labels, data):
+    def __init__(self, X, Y):
         '''
         :params:
-        labels: list of length n, with table headers (interpreted as some)
+        X: list of length n, with table headers (interpreted as some set of decisions/questions)
+                with the alst column being the final decision/classification/quantification
+        Y: table of values for the corresponding header X
         '''
-        self.labels = labels
-        self.data = data
+        self.X = X
+        self.Y = Y
+
+        self.labels = X[:-1]
+        self.label_data = Y[:-1]
+        self.result = Y[-1]
     
     def grow_tree(self):
         '''
@@ -61,8 +77,27 @@ class DecisionTree():
 
 class ClassificationDT(DecisionTree):
 
-    def __init__(self, labels, data):
-        super().__init__(labels, data)
+    def __init__(self, X, Y):
+        super().__init__(X, Y)
     
     def grow_tree(self):
-        return super().grow_tree()
+
+        super().grow_tree()
+        min_gini = 99999999
+        root = None
+
+        for i in range(len(self.labels)):
+
+            label = self.labels[i]
+            queries = self.label_data[i]
+
+            decision = None
+            if type(queries[0]) == "bool":
+                decision = binary_decision()
+            else:
+                decision = continuous_decision()
+
+            gini = gini_impurity()
+            if gini < min_gini:
+                min_gini = gini
+                root = DecisionTreeNode(self.X, self.Y, decision)
