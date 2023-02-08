@@ -1,16 +1,19 @@
+
 import pandas as pd
 import numpy as np
 
-ROMANS = ["I", "ii", "iii", "IV", "V", "VI", "vii"]
+ROMANS = ["I", "i", "V"]
+ROMAN_MAP = {"I": 0, "i": 1, "V": 2}
+ROMAN_TRANSMISSION = [[0.0, 0.0, 1.0],
+                      [0.0, 0.0, 1.0],
+                      [0.5, 0.5, 0.0]]
 
 EMOTIONS = ["NONE", "ANGER", "SAD", "FEAR", "IRONY", "LOVE", "JOY"]
 EMOTIONS_MAP = {"NONE": 0, "ANGER": 1, "SAD": 2, "FEAR": 3, "IRONY": 4, "LOVE": 5, "JOY": 6}
 
+# Weights for emotions
 MAJOR_WEIGHTS = [0.04, 0.06, 0.01, 0.02, 0.12, 0.27, 0.48]
 MINOR_WEIGHTS = [0.01, 0.31, 0.33, 0.25, 0.05, 0.03, 0.02]
-
-MAJOR_PROG_WEIGHTS = [0.33, 0.07, 0.03, 0.20, 0.21, 0.14, 0.02]
-MINOR_PROG_WEIGHTS = [0.10, 0.25, 0.19, 0.07, 0.13, 0.06, 0.20]
 
 def get_distribution(X, total):
     # Given some list x with discrete samples, return percentage distribution
@@ -35,43 +38,35 @@ class Chord():
     def print_chord(self):
         print(self.roman, ": ", self.emotion_dist)
 
-def generate_chord_progression(n, chords=True):
+def generate_chord_progression(n):
     # Total sequence of chords has length n
 
     CHORDS = [Chord(r) for r in ROMANS]
     start = np.random.choice(CHORDS, 1)[0]
 
-    progression = []
-
-    if chords:
-        progression = [start]
-    else:
-        progression = [start.emotion_dist]
+    progression = [start.emotion_dist]
+    progression_roman = [start.roman]
 
     for i in range(n-1):
-        # Regenerate chords
+
+        # Generate new distribution for each chord
         CHORDS = [Chord(r) for r in ROMANS]
 
-        if start.roman.isupper():
-            # Use starting chord's emotional distribution to roughly model the full progression of length n
-            chord = np.random.choice(CHORDS, 1, p=MAJOR_PROG_WEIGHTS)[0]
-            if chords:
-                progression.append(chord)
-            else:
-                progression.append(chord.emotion_dist)
-        else:
-            chord = np.random.choice(CHORDS, 1, p=MINOR_PROG_WEIGHTS)[0]
-            if chords:
-                progression.append(chord)
-            else:
-                progression.append(chord.emotion_dist)
+        last_roman = progression_roman[i]
+        next_chord = np.random.choice(CHORDS, 1, p=ROMAN_TRANSMISSION[ROMAN_MAP[last_roman]])[0]
 
-    return progression
+        progression.append(next_chord.emotion_dist)
+        progression_roman.append(next_chord.roman)
 
-def generate_fake_musical_data(m, n, chords=True):
+    return progression, progression_roman
+
+def generate_fake_musical_data(m, n):
     # Generate a distribution of 7 elements for 7 emotions which sum up to 1
     # Returns a n x m matrix of emotions
     data = []
     for i in range(m):
-        data.append(generate_chord_progression(n,chords=chords))
+        data.append(generate_chord_progression(n))
     return data
+
+def generate_fake_musical_data_as_pd(m, n):
+    pass
