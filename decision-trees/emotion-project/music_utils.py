@@ -7,6 +7,7 @@ ROMAN_MAP = {"I": 0, "i": 1, "V": 2}
 ROMAN_TRANSMISSION = [[0.0, 0.0, 1.0],
                       [0.0, 0.0, 1.0],
                       [0.5, 0.5, 0.0]]
+ROMAN_MAP_TOKENS = {"S": 0, "I": 1, "i": 2, "V": 3}
 
 EMOTIONS = ["NONE", "ANGER", "SAD", "FEAR", "IRONY", "LOVE", "JOY"]
 EMOTIONS_MAP = {"NONE": 0, "ANGER": 1, "SAD": 2, "FEAR": 3, "IRONY": 4, "LOVE": 5, "JOY": 6}
@@ -73,7 +74,7 @@ def generate_musical_data(m, n):
 # Generate musical data for t = N time steps
 def generate_musical_data_as_pd(N):
 
-    # Start token for X is START
+    # Start token for X is S
     x = []
     y = []
 
@@ -81,7 +82,7 @@ def generate_musical_data_as_pd(N):
 
     # Pick starting chord
     start = np.random.choice(CHORDS, 1)[0]
-    x.append(["START", *start.emotion_dist])
+    x.append(["S", *start.emotion_dist])
     y.append(start.roman)
 
     for t in range(1, N):
@@ -95,6 +96,12 @@ def generate_musical_data_as_pd(N):
         x_t = [last_roman, *next_chord.emotion_dist]
         x.append(x_t)
         y.append(next_chord.roman)
+
+    # Convert from string romans to their integer encodings
+    for t in range(len(x)):
+        x[t][0] = ROMAN_MAP_TOKENS[x[t][0]]
+    for t in range(len(y)):
+        y[t] = ROMAN_MAP_TOKENS[y[t]]
 
     X = pd.DataFrame(x, columns=["harmony_t-1", *EMOTIONS])
     Y = pd.DataFrame(y, columns=["harmony_t"])

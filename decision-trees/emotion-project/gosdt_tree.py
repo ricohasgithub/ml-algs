@@ -14,4 +14,4 @@ def sklearn_tree(N):
     decision_tree = tree.DecisionTreeClassifier()
     decision_tree.fit(X, Y)
 
-    
+sklearn_tree(5)
