@@ -96,4 +96,12 @@ def generate_musical_data_as_pd(N):
         x.append(x_t)
         y.append(next_chord.roman)
 
-    print(x, y)
+    X = pd.DataFrame(x, columns=["harmony_t-1", "emotions"])
+    Y = pd.DataFrame(y, columns=["harmony_t"])
+
+    print(X)
+    print(Y)
+
+    return X, Y
+
+generate_musical_data_as_pd(5)
