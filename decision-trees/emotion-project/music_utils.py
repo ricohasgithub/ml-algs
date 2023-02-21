@@ -81,7 +81,7 @@ def generate_musical_data_as_pd(N):
 
     # Pick starting chord
     start = np.random.choice(CHORDS, 1)[0]
-    x.append(["START", start.emotion_dist])
+    x.append(["START", *start.emotion_dist])
     y.append(start.roman)
 
     for t in range(1, N):
@@ -92,11 +92,11 @@ def generate_musical_data_as_pd(N):
         last_roman = y[t-1]
         next_chord = np.random.choice(CHORDS, 1, p=ROMAN_TRANSMISSION[ROMAN_MAP[last_roman]])[0]
 
-        x_t = [last_roman, next_chord.emotion_dist]
+        x_t = [last_roman, *next_chord.emotion_dist]
         x.append(x_t)
         y.append(next_chord.roman)
 
-    X = pd.DataFrame(x, columns=["harmony_t-1", "emotions"])
+    X = pd.DataFrame(x, columns=["harmony_t-1", *EMOTIONS])
     Y = pd.DataFrame(y, columns=["harmony_t"])
 
     print(X)
