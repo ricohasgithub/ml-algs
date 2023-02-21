@@ -60,9 +60,7 @@ def generate_chord_progression(n):
 
     return progression, progression_roman
 
-print(generate_chord_progression(5))
-
-def generate_fake_musical_data(m, n):
+def generate_musical_data(m, n):
     # Generate a distribution of 7 elements for 7 emotions which sum up to 1
     # Returns a n x m matrix of emotions
     data = []
@@ -72,5 +70,30 @@ def generate_fake_musical_data(m, n):
         data_romans.append(generate_chord_progression(n)[1])
     return data, data_romans
 
-def generate_fake_musical_data_as_pd(m, n):
-    pass
+# Generate musical data for t = N time steps
+def generate_musical_data_as_pd(N):
+
+    # Start token for X is START
+    x = []
+    y = []
+
+    CHORDS = [Chord(r) for r in ROMANS]
+
+    # Pick starting chord
+    start = np.random.choice(CHORDS, 1)[0]
+    x.append(["START", start.emotion_dist])
+    y.append(start.roman)
+
+    for t in range(1, N):
+
+        # Generate new distribution for each chord
+        CHORDS = [Chord(r) for r in ROMANS]
+
+        last_roman = y[t-1]
+        next_chord = np.random.choice(CHORDS, 1, p=ROMAN_TRANSMISSION[ROMAN_MAP[last_roman]])[0]
+
+        x_t = [last_roman, next_chord.emotion_dist]
+        x.append(x_t)
+        y.append(next_chord.roman)
+
+    print(x, y)
