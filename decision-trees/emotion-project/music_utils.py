@@ -110,5 +110,3 @@ def generate_musical_data_as_pd(N):
     print(Y)
 
     return X, Y
-
-generate_musical_data_as_pd(5)
