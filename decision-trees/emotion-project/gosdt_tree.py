@@ -42,6 +42,9 @@ def sklearn_tree(N):
     train_acc = decision_tree.score(X_train, Y_train)
     test_acc = decision_tree.score(X_test, Y_test)
 
+    # Visualize trees
+    tree.plot_tree(decision_tree)
+
     # Confusion matrix visual
     C_train = confusion_matrix(Y_train, preds_train)
     C_test = confusion_matrix(Y_test, preds_test)
