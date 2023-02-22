@@ -15,19 +15,20 @@ Music Sentiment Classification Task:
 '''
 
 # Plot confusion matrix, as returned by a scikit classifier; code taken from: https://stackoverflow.com/questions/35572000/how-can-i-plot-a-confusion-matrix
-def plot_confusion_matrix(C, title):
+def plot_confusion_matrix(C, title, plot=True):
     df_cm = pd.DataFrame(C, range(len(C)), range(len(C[0])))
     plt.figure(figsize=(5,3))
     ax = plt.axes()
     sn.set(font_scale=1.4) # for label size
     sn.heatmap(df_cm, ax=ax, annot=True, annot_kws={"size": 16}) # font size
     ax.set_title(title)
-    plt.show()
+    if plot: plt.show()
 
-def sklearn_tree(N):
+def sklearn_tree(N, X, Y):
 
     # Get training data and split 90/10 (train/test)
-    X, Y = generate_musical_data_as_pd(N)
+    if (X is None) and (Y is None):
+        X, Y = generate_musical_data_as_pd(N)
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1)
 
     # Init tree and fit
@@ -51,4 +52,14 @@ def sklearn_tree(N):
     plot_confusion_matrix(C_train, f"Training data w/ accuracy {train_acc}")
     plot_confusion_matrix(C_test, f"Testing data w/ accuracy {test_acc}")
 
-sklearn_tree(100)
+def boosted_tree(N, X, Y):
+
+    # Get training data and split 90/10 (train/test)
+    if (X is None) and (Y is None):
+        X, Y = generate_musical_data_as_pd(N)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1)
+
+def gosdt_tree(N, X, Y):
+    pass
+
+sklearn_tree(100, None, None)
