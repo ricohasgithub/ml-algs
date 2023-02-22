@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from music_utils import generate_musical_data_as_pd
 from sklearn import tree
+from sklearn.metrics import confusion_matrix
 
 # Plot confusion matrix, as returned by a scikit classifier; code taken from: https://stackoverflow.com/questions/35572000/how-can-i-plot-a-confusion-matrix
 def plot_confusion_matrix(C):
@@ -13,6 +14,7 @@ def plot_confusion_matrix(C):
     plt.figure(figsize=(10,7))
     sn.set(font_scale=1.4) # for label size
     sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
+    plt.show()
 
 def sklearn_tree(N):
 
@@ -23,4 +25,9 @@ def sklearn_tree(N):
     decision_tree = tree.DecisionTreeClassifier()
     decision_tree.fit(X, Y)
 
-sklearn_tree(10000)
+    # Confusion matrix visual
+    preds = decision_tree.predict(X)
+    C = confusion_matrix(Y, preds)
+    plot_confusion_matrix(C)
+
+sklearn_tree(100)
