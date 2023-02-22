@@ -110,6 +110,5 @@ def boosted_tree(N, X, Y):
 def gosdt_tree(N, X, Y):
     pass
 
-# fit_tree(100, None, None, tree.DecisionTreeClassifier)
-
+fit_tree(100, None, None, GradientBoostingClassifier)
 plt.show()
