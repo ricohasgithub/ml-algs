@@ -5,10 +5,13 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 
 from music_utils import generate_musical_data_as_pd
+
 from sklearn import tree
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+
+from gosdt import GOSDT
 
 '''
 Music Sentiment Classification Task:
@@ -110,5 +113,5 @@ def boosted_tree(N, X, Y):
 def gosdt_tree(N, X, Y):
     pass
 
-fit_tree(100, None, None, GradientBoostingClassifier)
+fit_tree(100, None, None, GOSDT)
 plt.show()
