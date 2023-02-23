@@ -120,14 +120,24 @@ def gosdt_tree(N, X, Y):
     config = {
             "regularization": 0.02,
             "depth_budget": 5,
-            "time_limit": 60,
+            "time_limit": 30,
             "similar_support": False
         }
 
     gosdt_tree = GOSDT(config)
     gosdt_tree.fit(X_train, Y_train)
+
     train_acc = gosdt_tree.score(X_train, Y_train)
-    print("GOSDT tree accuracy:", train_acc)
+    test_acc = gosdt_tree.score(X_test, Y_test)
+
+    preds_train = gosdt_tree.predict(X_train)
+    preds_test = gosdt_tree.predict(X_test)
+
+    # Confusion matrix visual
+    C_train = confusion_matrix(Y_train, preds_train)
+    C_test = confusion_matrix(Y_test, preds_test)
+    plot_confusion_matrix(C_train, f"Training data w/ accuracy {train_acc}", plot=False)
+    plot_confusion_matrix(C_test, f"Testing data w/ accuracy {test_acc}", plot=False)
 
 
 # fit_tree(100, None, None, tree.DecisionTreeClassifier)
