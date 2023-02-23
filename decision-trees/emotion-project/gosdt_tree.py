@@ -111,7 +111,24 @@ def boosted_tree(N, X, Y):
     plot_confusion_matrix(C_test, f"Testing data w/ accuracy {test_acc}", plot=False)
 
 def gosdt_tree(N, X, Y):
-    pass
 
-fit_tree(100, None, None, GOSDT)
+    # Get training data and split 90/10 (train/test)
+    if (X is None) and (Y is None):
+        X, Y = generate_musical_data_as_pd(N)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1)
+
+    config = {
+            "regularization": 0.02,
+            "depth_budget": 5,
+            "time_limit": 60,
+            "similar_support": False
+        }
+
+    gosdt_tree = GOSDT(config)
+    gosdt_tree.fit()
+    train_acc = gosdt_tree.score(X_train, Y_train)
+    print("GOSDT tree accuracy:", train_acc)
+
+
+fit_tree(100, None, None, tree.DecisionTreeClassifier)
 plt.show()
