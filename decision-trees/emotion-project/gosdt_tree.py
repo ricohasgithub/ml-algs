@@ -125,10 +125,11 @@ def gosdt_tree(N, X, Y):
         }
 
     gosdt_tree = GOSDT(config)
-    gosdt_tree.fit()
+    gosdt_tree.fit(X_train, Y_train)
     train_acc = gosdt_tree.score(X_train, Y_train)
     print("GOSDT tree accuracy:", train_acc)
 
 
-fit_tree(100, None, None, tree.DecisionTreeClassifier)
+# fit_tree(100, None, None, tree.DecisionTreeClassifier)
+gosdt_tree(100, None, None)
 plt.show()
