@@ -26,7 +26,7 @@ class HMM():
         # Generate initial distributions based on priors
         curr_observation_index = self.observed_states.index(observed_sequence[0])
         probabilities.append([self.priors[self.hidden_states.index(hidden_state)]*self.emission_matrix[self.hidden_states.index(hidden_state)][curr_observation_index]
-                              for hidden_state in self.hidden_states])
+                               for hidden_state in self.hidden_states])
         
         # For each new observation, append highest probabilitiy to each hidden state's corresponding entry in list probabilities
         for i in range(1, len(observed_sequence)):
@@ -34,6 +34,13 @@ class HMM():
             last_states_probs = probabilities[-1]
             # Get the index of the current observation's token
             curr_observation_index = self.observed_states.index(observed_sequence[i])
+            next_state_probs = []
+            for hidden_state in self.hidden_states:
+                hidden_state_index = self.hidden_states.index(hidden_state)
+                max_hidden_state = max([last_state_prob*self.transition_matrix[self.hidden_states[self.hidden_states.index(i_hidden_state)]][hidden_state_index]*self.emission_matrix[hidden_state_index][curr_observation_index]
+                                        for i_hidden_state in self.hidden_states for last_state_prob in last_states_probs])
+                next_state_probs.append(max_hidden_state)
+            probabilities.append(next_state_probs)
 
         # Get path back
         most_likely_path = []
