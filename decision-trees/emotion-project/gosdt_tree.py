@@ -140,6 +140,6 @@ def gosdt_tree(N, X, Y):
     plot_confusion_matrix(C_test, f"Testing data w/ accuracy {test_acc}", plot=False)
 
 
-# fit_tree(100, None, None, tree.DecisionTreeClassifier)
-gosdt_tree(100, None, None)
+fit_tree(100, None, None, tree.DecisionTreeClassifier)
+# gosdt_tree(100, None, None)
 plt.show()
