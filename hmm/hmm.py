@@ -16,6 +16,7 @@ class HMM():
         self.hidden_states = hidden_states if hidden_states is not None else []
         self.observed_states = observed_states if observed_states is not None else []
 
+        self.priors = []
 
     def get_viterbi_path(self, observed_sequence):
 
