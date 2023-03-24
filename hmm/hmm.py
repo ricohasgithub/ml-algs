@@ -5,13 +5,14 @@ class HMM():
 
     def __init__(self,
                  transition_matrix=None, 
-                 emissions_matrix=None, 
+                 emission_matrix=None, 
                  hidden_states=None,
                  observed_states=None):
         
         # Assign instance variables
+        # 2d matrix where (r, c) = P(r|c)
         self.transition_matrix = transition_matrix if transition_matrix is not None else []
-        self.emissions_matrix = emissions_matrix if emissions_matrix is not None else []
+        self.emission_matrix = emission_matrix if emission_matrix is not None else []
         self.hidden_states = hidden_states if hidden_states is not None else []
         self.observed_states = observed_states if observed_states is not None else []
 
@@ -24,7 +25,7 @@ class HMM():
         probabilities = []
         # Generate initial distributions based on priors
         curr_observation_index = self.observed_states.index(observed_sequence[0])
-        probabilities.append([self.priors[self.hidden_states.index(hidden_state)]*self.emissions_matrix[curr_observation_index]
+        probabilities.append([self.priors[self.hidden_states.index(hidden_state)]*self.emission_matrix[self.hidden_states.index(hidden_state)][curr_observation_index]
                               for hidden_state in self.hidden_states])
         
         # For each new observation, append highest probabilitiy to each hidden state's corresponding entry in list probabilities
