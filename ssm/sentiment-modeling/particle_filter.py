@@ -1,11 +1,11 @@
 
 import json
 import numpy as np
-import filterpy
 import matplotlib.pyplot as plt
 
 from numpy.linalg import norm
 from numpy.random import randn, dirichlet
+from particles import state_space_models as ssm
 
 def normalize(v):
     return v / norm(v, ord=1)
@@ -24,18 +24,6 @@ def get_RN_mixture_from_emotions(emotions, p_t):
     # Normalize
     mixture = normalize(mixture.tolist()[0])
     return mixture
-
-# Taken from: https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/12-Particle-Filters.ipynb
-def create_gaussian_particles(mean, std, N):
-    particles = np.empty((N, 3))
-    particles[:, 0] = mean[0] + (randn(N) * std[0])
-    particles[:, 1] = mean[1] + (randn(N) * std[1])
-    particles[:, 2] = mean[2] + (randn(N) * std[2])
-    particles[:, 2] %= 2 * np.pi
-    return particles
-
-def create_dirichlet_particles(alpha):
-    dirichlet
 
 def main():
     emissions_matrix = np.load("emission_matrices.npy", allow_pickle=True)
