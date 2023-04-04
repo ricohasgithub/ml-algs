@@ -25,7 +25,9 @@ def get_RN_mixture_from_emotions(emotions, p_t):
     mixture = normalize(mixture.tolist()[0])
     return mixture
 
-def load_emissions_matrices():
+def load_emissions_matrices(visualize=False):
     emissions_matrix = np.load("emission_matrices.npy", allow_pickle=True)
     emissions_matrix_header = json.load(open("emission_matrices.json"))
-    visualize_emissions_matrix(emissions_matrix, emissions_matrix_header[0], emissions_matrix_header[1], emissions_matrix_header[2], emissions_matrix_header[3])
+    if visualize:
+        visualize_emissions_matrix(emissions_matrix, emissions_matrix_header[0], emissions_matrix_header[1], emissions_matrix_header[2], emissions_matrix_header[3])
+    return emissions_matrix, emissions_matrix_header
