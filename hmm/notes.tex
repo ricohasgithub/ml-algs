@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsfonts, amsmath, amssymb}
+
+\title{Probabilisitc Reasoning Over Time}
+\author{Rico Zhu}
+\date{March 2023}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+For an intelligent agent to be reason in partially observable environments (such as ones with
+hidden and observable states), the agent will need to maintain a belief state which represents
+which states of the world are currently possible; a transition model which the agent will
+use to predict how the world might evolve in the next time step; and from percepts observed 
+and a sensor model, the agent can update the belief state.\\
+
+\noindent A changing world is modeled using a variable for each aspect of the world state at each point in
+time. The transition and sensor models may be uncertain: the transition model describes the
+probability distribution of the variables at time t, given the state of the world at past times,
+while the observation/emission/sensor model describes the probability of each percept at time t, given the current
+state of the world.
+
+\section*{Generic Temporal Model Setup}
+
+Let $X_t$ denote the set of (latent/hidden) state variables at time step $t$, and $E_t$ denote
+evidence/observation variables at time step $t$. Note that we will use the shorthand $X_{1:10}$
+to denote $X_1, X_2, ... X_{10}$.\\
+
+\noindent Given a set of hidden and observed variables, the ``world'' evolves according to a transition
+model, which is essentially a probability distribution over the latent states. In a first-order Markov
+model, the transition model is the conditional distribution $P(X_{t} | X_{t-1})$; the transition model of
+a second order Markov model is $P(X_{t} | X_{t-2}, X_{t-1})$. To avoid having an infinite number of
+distributions, one for each $t$, we assume that changes are caused by a stationary process -- a process
+of change which are governed by laws that do not themselves change over time.\\
+
+\noindent For the sensor/observation model, we assume that $P(E_{t} | X_{0:t}, E_{0:t-1}) = P(E_{t} | X_{t})$.\\
+
+\noindent We note that this setup describes a Bayesian network, where the dependency structure flows
+``forwards'' in time for the latent state, and a single emission is produced given each latent state at time $t$.
+
+\section*{Inference in Temporal Models}
+Filtering: compute belief state -- given a sequence of observations, compute what the posterior distribution
+over the most recent (latent) state is -> $P(X_{t} | e_{1:t})$.\\
+
+\noindent Prediction: compute the posterior distribution of a future state given a sequence of observations ->
+$P(X_{t+k} | e_{1:t})$, for $k > 0$.\\
+
+\noindent Smoothing: compute the posterior distribution of a past state given evidence which extends into the future ->
+$P(X_{k} | e_{1:t})$ for $0 \leq k < t$.\\
+
+\noindent Most likely path/explanation: compute most likely sequence of latent states given a sequence of observations.\\
+
+\noindent If the transition and emission models are not yet known, they can be learned from observations based on inference.
+Inference provides an estimate of what transitions actually occurred and of what states generated the sensor readings, and these estimates
+can be used to update the models. The updated models provide new estimates, and the process iterates to convergence.
+The overall process is an instance of the expectation-maximization or EM algorithm.\\
+
+\noindent Prediction: 
+
+\section*{Hidden Markov Models}
+
+
+\section*{Kalman Filters}
+
+
+\end{document}

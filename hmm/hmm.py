@@ -4,18 +4,21 @@ import numpy as np
 class HMM():
 
     def __init__(self,
+                 data=None,
                  transition_matrix=None, 
                  emission_matrix=None, 
                  hidden_states=None,
                  observed_states=None):
         
         # Assign instance variables
+        self.data = data if data is not None else []
         # 2d matrix where (r, c) = P(r|c)
         self.transition_matrix = transition_matrix if transition_matrix is not None else []
         self.emission_matrix = emission_matrix if emission_matrix is not None else []
         self.hidden_states = hidden_states if hidden_states is not None else []
         self.observed_states = observed_states if observed_states is not None else []
 
+        # TODO: write method to retrieve priors from a given sample sequence
         self.priors = []
 
     def get_viterbi_path(self, observed_sequence):
