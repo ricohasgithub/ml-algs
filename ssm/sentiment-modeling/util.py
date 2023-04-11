@@ -21,6 +21,7 @@ def get_RN_mixture_from_emotions(emotions, p_t):
     # Take a linear combination of the rows of the emotion matrix, weighted by the presence of each emotion in p_t
     emotions_matrix = np.asmatrix(emotions)
     mixture = p_t * emotions_matrix
+    # TODO: forgot to actually take linear combination
     # Normalize
     mixture = normalize(mixture.tolist()[0])
     return mixture
